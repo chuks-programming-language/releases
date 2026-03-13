@@ -113,11 +113,7 @@ if [ "$PLATFORM" != "windows" ]; then
             PATH_ADDED=true
             ;;
         bash)
-            if [ -f "$HOME/.bashrc" ]; then
-                add_to_path "$HOME/.bashrc"
-            elif [ -f "$HOME/.bash_profile" ]; then
-                add_to_path "$HOME/.bash_profile"
-            fi
+            add_to_path "$HOME/.bashrc"
             PATH_ADDED=true
             ;;
     esac
@@ -141,9 +137,16 @@ if command -v chuks >/dev/null 2>&1; then
     VERSION="$(chuks --version 2>/dev/null || echo "unknown")"
     echo "  Version: ${VERSION}"
 else
+    # Determine which rc file to source
+    CURRENT_SHELL="$(basename "$SHELL" 2>/dev/null || echo "")"
+    case "$CURRENT_SHELL" in
+        zsh)  RC_FILE="~/.zshrc" ;;
+        bash) RC_FILE="~/.bashrc" ;;
+        *)    RC_FILE="~/.profile" ;;
+    esac
     echo "  To start using Chuks, run:"
     echo ""
-    echo "    source ~/.zshrc"
+    echo "    source ${RC_FILE}"
     echo ""
     echo "  Or open a new terminal. Then verify with:"
     echo ""
