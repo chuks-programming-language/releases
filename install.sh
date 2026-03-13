@@ -141,7 +141,11 @@ if command -v chuks >/dev/null 2>&1; then
     VERSION="$(chuks --version 2>/dev/null || echo "unknown")"
     echo "  Version: ${VERSION}"
 else
-    echo "  Open a new terminal, then run:"
+    echo "  To start using Chuks, run:"
+    echo ""
+    echo "    source ~/.zshrc"
+    echo ""
+    echo "  Or open a new terminal. Then verify with:"
     echo ""
     echo "    chuks --version"
 fi
