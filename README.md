@@ -38,8 +38,10 @@ app.listen(9000)
 - **Structured concurrency** — `spawn` + `await` with automatic parent-child cancellation
 - **Static types** — Errors caught at compile time, not in production
 - **Classes, generics, closures** — Full OOP with inheritance, abstract classes, and interfaces
-- **Single binary deployment** — No runtime, no dependencies, no package manager required
+- **Package manager** — `chuks add`, `chuks install`, `chuks publish` with semver constraints and supply chain security
+- **Single binary deployment** — No runtime, no dependencies
 - **Rich standard library** — HTTP, JSON, crypto, JWT, database drivers, file system, and more
+- **IDE support** — VS Code extension with go-to-definition, find references, rename, inlay hints, and more
 
 ### Performance
 
