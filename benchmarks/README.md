@@ -8,15 +8,15 @@ These are the exact scripts we use in our own CI to track regressions. Everyone 
 
 Install whichever runtimes you want to compare. Missing ones are skipped automatically.
 
-| Tool       | Install                                                   |
-|------------|-----------------------------------------------------------|
-| `chuks`    | `curl -fsSL https://chuks.org/install.sh \| bash`         |
-| `go`       | https://go.dev/dl/                                        |
-| `java`/`javac` | `brew install openjdk` / distro JDK                   |
-| `node`     | https://nodejs.org                                        |
-| `bun`      | `curl -fsSL https://bun.sh/install \| bash`               |
-| `python3`  | Usually preinstalled                                      |
-| `wrk`      | `brew install wrk` / `apt install wrk` (HTTP test only)   |
+| Tool       | Install                                                                                                   |
+|------------|-----------------------------------------------------------------------------------------------------------|
+| `chuks`    | `curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash` |
+| `go`       | https://go.dev/dl/                                                                                        |
+| `java`/`javac` | `brew install openjdk` / distro JDK                                                                   |
+| `node`     | https://nodejs.org                                                                                        |
+| `bun`      | `curl -fsSL https://bun.sh/install \| bash`                                                               |
+| `python3`  | Usually preinstalled                                                                                      |
+| `wrk`      | `brew install wrk` / `apt install wrk` (HTTP test only)                                                   |
 
 ## Quick start
 
