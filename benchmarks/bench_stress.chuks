@@ -1,0 +1,240 @@
+// ============================================================
+// CHUKS PERFORMANCE BENCHMARK SUITE
+// All times in milliseconds
+// ============================================================
+
+function fib(n: int): int {
+  var a: int = 0;
+  var b: int = 1;
+  for (var i: int = 0; i < n; i = i + 1) {
+    var tmp: int = a + b;
+    a = b;
+    b = tmp;
+  }
+  return a;
+}
+
+function matmul_sim(size: int): int {
+  var sum: int = 0;
+  for (var i: int = 0; i < size; i = i + 1) {
+    for (var j: int = 0; j < size; j = j + 1) {
+      for (var k: int = 0; k < size; k = k + 1) {
+        sum = sum + (i * k) - (j * k) + 1;
+      }
+    }
+  }
+  return sum;
+}
+
+function count_primes(limit: int): int {
+  var count: int = 0;
+  for (var n: int = 2; n < limit; n = n + 1) {
+    var is_prime: bool = true;
+    for (var d: int = 2; d * d <= n; d = d + 1) {
+      if (n % d == 0) {
+        is_prime = false;
+        break;
+      }
+    }
+    if (is_prime) {
+      count = count + 1;
+    }
+  }
+  return count;
+}
+
+function array_stress(n: int): int {
+  var arr: []int = [];
+  for (var i: int = 0; i < n; i = i + 1) {
+    arr.push(i * i);
+  }
+  var sum: int = 0;
+  for (var i: int = 0; i < length(arr); i = i + 1) {
+    sum = sum + arr[i];
+  }
+  return sum;
+}
+
+function map_stress(n: int): int {
+  var m: map[string]int = {};
+  for (var i: int = 0; i < n; i = i + 1) {
+    m["key"] = i * i;
+  }
+  var sum: int = 0;
+  var keys: []string = m.keys();
+  for (var i: int = 0; i < length(keys); i = i + 1) {
+    sum = sum + m[keys[i]];
+  }
+  return sum;
+}
+
+class Vector {
+  var x: int;
+  var y: int;
+
+  constructor(x: int, y: int) {
+    this.x = x;
+    this.y = y;
+  }
+
+  add(other: Vector): Vector {
+    return new Vector(this.x + other.x, this.y + other.y);
+  }
+
+  magnitudeSquared(): int {
+    return this.x * this.x + this.y * this.y;
+  }
+}
+
+function oop_stress(n: int): int {
+  var total: int = 0;
+  for (var i: int = 0; i < n; i = i + 1) {
+    var v1: Vector = new Vector(i, i + 1);
+    var v2: Vector = new Vector(i + 2, i + 3);
+    var v3: Vector = v1.add(v2);
+    total = total + v3.magnitudeSquared();
+  }
+  return total;
+}
+
+class Shape {
+  var name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  area(): int {
+    return 0;
+  }
+}
+
+class Rectangle extends Shape {
+  var w: int;
+  var h: int;
+  constructor(w: int, h: int) {
+    super("rect");
+    this.w = w;
+    this.h = h;
+  }
+  override area(): int {
+    return this.w * this.h;
+  }
+}
+
+function inheritance_stress(n: int): int {
+  var total: int = 0;
+  for (var i: int = 0; i < n; i = i + 1) {
+    var r: Rectangle = new Rectangle(i, i + 1);
+    total = total + r.area();
+  }
+  return total;
+}
+
+function make_counter(): any {
+  var count: int = 0;
+  function increment(): int {
+    count = count + 1;
+    return count;
+  }
+  return increment;
+}
+
+function closure_stress(n: int): int {
+  var counter: any = make_counter();
+  var result: int = 0;
+  for (var i: int = 0; i < n; i = i + 1) {
+    result = counter();
+  }
+  return result;
+}
+
+function string_stress(n: int): int {
+  var s: string = "";
+  for (var i: int = 0; i < n; i = i + 1) {
+    s = s + "x";
+  }
+  return length(s);
+}
+
+function fib_recursive(n: int): int {
+  if (n <= 1) {
+    return n;
+  }
+  return fib_recursive(n - 1) + fib_recursive(n - 2);
+}
+
+// ============ RUN ALL — each benchmark prints just the ms ============
+
+println("=== CHUKS PERFORMANCE BENCHMARK SUITE ===");
+
+// 1. Fibonacci iterative (1M)
+var t0: int = time_now();
+fib(1000000);
+var t1: int = time_now();
+println("1_fib_iter_1M");
+println(t1 - t0);
+
+// 2. Nested loops 100^3
+var t2: int = time_now();
+matmul_sim(100);
+var t3: int = time_now();
+println("2_nested_loops_1M");
+println(t3 - t2);
+
+// 3. Count primes < 50K
+var t4: int = time_now();
+count_primes(50000);
+var t5: int = time_now();
+println("3_primes_50K");
+println(t5 - t4);
+
+// 4. Array 100K push + sum
+var t6: int = time_now();
+array_stress(100000);
+var t7: int = time_now();
+println("4_array_100K");
+println(t7 - t6);
+
+// 5. Map 50K insert + lookup
+var t8: int = time_now();
+map_stress(50000);
+var t9: int = time_now();
+println("5_map_50K");
+println(t9 - t8);
+
+// 6. OOP 100K create + methods
+var t10: int = time_now();
+oop_stress(100000);
+var t11: int = time_now();
+println("6_oop_100K");
+println(t11 - t10);
+
+// 7. Inheritance 100K
+var t12: int = time_now();
+inheritance_stress(100000);
+var t13: int = time_now();
+println("7_inherit_100K");
+println(t13 - t12);
+
+// 8. Closures 1M calls
+var t14: int = time_now();
+closure_stress(1000000);
+var t15: int = time_now();
+println("8_closure_1M");
+println(t15 - t14);
+
+// 9. String concat 10K
+var t16: int = time_now();
+string_stress(10000);
+var t17: int = time_now();
+println("9_string_10K");
+println(t17 - t16);
+
+// 10. Recursive fib(30)
+var t18: int = time_now();
+fib_recursive(30);
+var t19: int = time_now();
+println("10_fib_rec_30");
+println(t19 - t18);
+
+println("TOTAL");
+println(t19 - t0);

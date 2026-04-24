@@ -1,0 +1,13 @@
+import { createServer, Request, Response } from "std/http"
+
+var app = createServer();
+
+app.get("/", function(req: Request, res: Response) {
+    res.send("ok")
+})
+
+app.get("/json", function(req: Request, res: Response) {
+    res.json('{"status":"ok"}')
+})
+
+app.listen(9000)

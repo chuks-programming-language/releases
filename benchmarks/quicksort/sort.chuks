@@ -1,0 +1,64 @@
+// Quicksort Benchmark (Iterative with stack)
+// Tests: loops, array indexing, swap operations, conditional logic
+
+function main() {
+    var N: int = 100000;
+
+    // Generate pseudo-random array using LCG
+    var arr: []int = [];
+    var seed: int = 42;
+    for (var i = 0; i < N; i++) {
+        seed = (seed * 1103515245 + 12345) % 2147483648;
+        arr.push(seed % 1000000);
+    }
+
+    // Iterative quicksort using manual stack
+    var stack: []int = [];
+    stack.push(0);
+    stack.push(N - 1);
+
+    for (var spin = 0; stack.length > 0; spin++) {
+        var hi: int = stack.pop() ?? 0;
+        var lo: int = stack.pop() ?? 0;
+
+        if (lo >= hi) {
+            continue;
+        }
+
+        // Partition
+        var pivot: int = arr[hi];
+        var i: int = lo;
+        for (var j = lo; j < hi; j++) {
+            if (arr[j] <= pivot) {
+                var tmp: int = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i++;
+            }
+        }
+        var tmp2: int = arr[i];
+        arr[i] = arr[hi];
+        arr[hi] = tmp2;
+
+        // Push sub-ranges onto stack
+        if (i - 1 > lo) {
+            stack.push(lo);
+            stack.push(i - 1);
+        }
+        if (i + 1 < hi) {
+            stack.push(i + 1);
+            stack.push(hi);
+        }
+    }
+
+    // Verify sorted + print checksum
+    var sorted: int = 1;
+    for (var i = 1; i < N; i++) {
+        if (arr[i] < arr[i - 1]) {
+            sorted = 0;
+        }
+    }
+    println(sorted);
+    println(arr[0]);
+    println(arr[N - 1]);
+}

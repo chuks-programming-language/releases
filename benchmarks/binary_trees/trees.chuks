@@ -1,0 +1,52 @@
+// Binary Trees Benchmark
+// Tests: class instantiation, recursive construction, method calls, deep recursion
+// Classic benchmark: create complete binary trees and compute checksums
+
+class TreeNode {
+    var left: TreeNode?
+    var right: TreeNode?
+    var value: int
+
+    constructor(value: int) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+    }
+
+    check(): int {
+        var l = this.left;
+        var r = this.right;
+        if (l == null || r == null) {
+            return this.value;
+        }
+        return this.value + l.check() - r.check();
+    }
+}
+
+function buildTree(depth: int): TreeNode {
+    if (depth == 0) {
+        return new TreeNode(1);
+    }
+    var node: TreeNode = new TreeNode(depth);
+    node.left = buildTree(depth - 1);
+    node.right = buildTree(depth - 1);
+    return node;
+}
+
+function main() {
+    var maxDepth: int = 16;
+
+    // Build a tree and compute its check value
+    var tree: TreeNode = buildTree(maxDepth);
+    var check: int = tree.check();
+    println(check);
+
+    // Stress test: build multiple smaller trees
+    var sum: int = 0;
+    var iterations: int = 1000;
+    for (var i = 0; i < iterations; i++) {
+        var t: TreeNode = buildTree(10);
+        sum = sum + t.check();
+    }
+    println(sum);
+}

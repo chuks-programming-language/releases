@@ -1,0 +1,82 @@
+// OOP Benchmark
+// Tests: class instantiation, inheritance, method calls, constructor chaining, polymorphism
+// Uses integer arithmetic to avoid int/float conversion (Chuks has strict typing)
+
+class Shape {
+    var kind: string
+
+    constructor(kind: string) {
+        this.kind = kind;
+    }
+
+    area(): int {
+        return 0;
+    }
+
+    perimeter(): int {
+        return 0;
+    }
+}
+
+class Circle extends Shape {
+    var radius: int
+
+    constructor(radius: int) {
+        super("circle");
+        this.radius = radius;
+    }
+
+    override area(): int {
+        return 314 * this.radius * this.radius / 100;
+    }
+
+    override perimeter(): int {
+        return 628 * this.radius / 100;
+    }
+}
+
+class Rectangle extends Shape {
+    var width: int
+    var height: int
+
+    constructor(width: int, height: int) {
+        super("rectangle");
+        this.width = width;
+        this.height = height;
+    }
+
+    override area(): int {
+        return this.width * this.height;
+    }
+
+    override perimeter(): int {
+        return 2 * (this.width + this.height);
+    }
+}
+
+function main() {
+    var N: int = 100000;
+    var totalArea: int = 0;
+    var totalPerimeter: int = 0;
+
+    for (var i = 0; i < N; i++) {
+        var r: int = 1 + i % 100;
+
+        if (i % 3 == 0) {
+            var c = new Circle(r);
+            totalArea = totalArea + c.area();
+            totalPerimeter = totalPerimeter + c.perimeter();
+        } else if (i % 3 == 1) {
+            var rect = new Rectangle(r, r * 2);
+            totalArea = totalArea + rect.area();
+            totalPerimeter = totalPerimeter + rect.perimeter();
+        } else {
+            var sq = new Rectangle(r, r);
+            totalArea = totalArea + sq.area();
+            totalPerimeter = totalPerimeter + sq.perimeter();
+        }
+    }
+
+    println(totalArea);
+    println(totalPerimeter);
+}

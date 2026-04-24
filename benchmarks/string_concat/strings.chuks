@@ -1,0 +1,20 @@
+// String Concatenation Benchmark
+// Tests: string operations, concatenation in loops, string building
+
+function main() {
+    var N: int = 100000;
+
+    // Build a long string via concatenation
+    var result: string = "";
+    for (var i = 0; i < N; i++) {
+        result = result + "a";
+    }
+    println(length(result));
+
+    // Build string with repeated patterns
+    var pattern: string = "";
+    for (var i = 0; i < 10000; i++) {
+        pattern = pattern + "abc";
+    }
+    println(length(pattern));
+}

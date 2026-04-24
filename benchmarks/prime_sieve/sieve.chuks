@@ -1,0 +1,32 @@
+// Prime Sieve (Sieve of Eratosthenes) Benchmark
+// Tests: loops, conditionals, array manipulation, boolean logic
+
+function main() {
+    var N: int = 1000000;
+
+    // Create sieve array - all true initially
+    var sieve: []bool = [];
+    for (var i = 0; i < N; i++) {
+        sieve.push(true);
+    }
+    sieve[0] = false;
+    sieve[1] = false;
+
+    // Sieve of Eratosthenes
+    for (var i = 2; i * i < N; i++) {
+        if (sieve[i] == true) {
+            for (var j = i * i; j < N; j = j + i) {
+                sieve[j] = false;
+            }
+        }
+    }
+
+    // Count primes
+    var count: int = 0;
+    for (var k = 0; k < N; k++) {
+        if (sieve[k] == true) {
+            count++;
+        }
+    }
+    println(count);
+}

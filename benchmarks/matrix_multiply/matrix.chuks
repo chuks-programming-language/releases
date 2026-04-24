@@ -1,0 +1,36 @@
+// Matrix Multiplication Benchmark
+// Tests: nested loops, array creation, arithmetic, variable scoping
+
+function main() {
+    var N: int = 200;
+
+    // Create NxN matrices as flat arrays (row-major)
+    var A: []int = [];
+    var B: []int = [];
+    var C: []int = [];
+
+    // Initialize matrices
+    for (var i = 0; i < N * N; i++) {
+        A.push(i % 100);
+        B.push((i * 3 + 7) % 100);
+        C.push(0);
+    }
+
+    // Matrix multiply: C = A * B
+    for (var i = 0; i < N; i++) {
+        for (var j = 0; j < N; j++) {
+            var sum: int = 0;
+            for (var k = 0; k < N; k++) {
+                sum = sum + A[i * N + k] * B[k * N + j];
+            }
+            C[i * N + j] = sum;
+        }
+    }
+
+    // Print checksum (sum of diagonal)
+    var checksum: int = 0;
+    for (var i = 0; i < N; i++) {
+        checksum = checksum + C[i * N + i];
+    }
+    println(checksum);
+}

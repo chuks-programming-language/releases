@@ -1,0 +1,67 @@
+// Map Operations Benchmark
+// Tests: map creation, insertion, key lookup, iteration, deletion
+
+function main() {
+    var N: int = 100000;
+    var chars: string = "abcdefghijklmnopqrstuvwxyz0123456789";
+    var base: int = 36;
+
+    // Phase 1: Insert N key-value pairs
+    var m = {};
+    for (var i = 0; i < N; i++) {
+        var n: int = i;
+        var c0: int = n % base;
+        n = n / base;
+        var c1: int = n % base;
+        n = n / base;
+        var c2: int = n % base;
+        n = n / base;
+        var c3: int = n % base;
+        var key: string = chars[c3] + chars[c2] + chars[c1] + chars[c0];
+        m[key] = i * 2;
+    }
+    println(m.size);
+
+    // Phase 2: Lookup all keys
+    var found: int = 0;
+    for (var i = 0; i < N; i++) {
+        var n: int = i;
+        var c0: int = n % base;
+        n = n / base;
+        var c1: int = n % base;
+        n = n / base;
+        var c2: int = n % base;
+        n = n / base;
+        var c3: int = n % base;
+        var key: string = chars[c3] + chars[c2] + chars[c1] + chars[c0];
+        if (m.has(key)) {
+            found = found + 1;
+        }
+    }
+    println(found);
+
+    // Phase 3: Sum all values via keys
+    var sum: int = 0;
+    var allKeys: []string = m.keys();
+    var numKeys: int = length(allKeys);
+    for (var i = 0; i < numKeys; i++) {
+        var k: string = allKeys[i];
+        sum = sum + m[k];
+    }
+    println(sum);
+
+    // Phase 4: Delete half the keys (even indices)
+    for (var i = 0; i < N; i += 2) {
+        var n: int = i;
+        var c0: int = n % base;
+        n = n / base;
+        var c1: int = n % base;
+        n = n / base;
+        var c2: int = n % base;
+        n = n / base;
+        var c3: int = n % base;
+        var key: string = chars[c3] + chars[c2] + chars[c1] + chars[c0];
+        m.delete(key);
+    }
+    println(m.size);
+}

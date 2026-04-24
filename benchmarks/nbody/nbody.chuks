@@ -1,0 +1,62 @@
+// N-Body Simulation Benchmark
+// Tests: floating-point arithmetic, loops, array access, complex math
+// Simulates gravitational interactions between bodies
+
+function main() {
+    var N: int = 5;
+    var steps: int = 500000;
+
+    // Body data as parallel arrays: x, y, z, vx, vy, vz, mass
+    var x: []float = [0.0, 4.841431, 8.343367, 12.894369, 15.379697];
+    var y: []float = [0.0, -1.160320, 4.124799, -15.201544, -25.632172];
+    var z: []float = [0.0, -0.103860, -0.403093, -0.223581, 0.179258];
+
+    var vx: []float = [0.0, 0.001660, 0.007699, 0.002965, 0.002681];
+    var vy: []float = [0.0, 0.007699, 0.006286, 0.002378, 0.001628];
+    var vz: []float = [0.0, -0.000069, -0.000169, -0.000030, -0.000015];
+
+    var mass: []float = [39.478418, 0.037694, 0.011287, 0.001724, 0.000203];
+
+    var dt: float = 0.01;
+
+    for (var step = 0; step < steps; step++) {
+        // Update velocities based on gravitational interactions
+        for (var i = 0; i < N; i++) {
+            for (var j = i + 1; j < N; j++) {
+                var dx: float = x[i] - x[j];
+                var dy: float = y[i] - y[j];
+                var dz: float = z[i] - z[j];
+                var dist2: float = dx * dx + dy * dy + dz * dz;
+                // Simple approximation: avoid sqrt by using dist^3 = (dist2)^1.5
+                // We approximate: mag = dt / (dist2 * sqrt(dist2))
+                // For benchmarking purposes, use a simplified force calculation
+                var mag: float = dt / (dist2 * 100.0 + 0.001);
+
+                var fx: float = dx * mag;
+                var fy: float = dy * mag;
+                var fz: float = dz * mag;
+
+                vx[i] = vx[i] - fx * mass[j];
+                vy[i] = vy[i] - fy * mass[j];
+                vz[i] = vz[i] - fz * mass[j];
+                vx[j] = vx[j] + fx * mass[i];
+                vy[j] = vy[j] + fy * mass[i];
+                vz[j] = vz[j] + fz * mass[i];
+            }
+        }
+
+        // Update positions
+        for (var i = 0; i < N; i++) {
+            x[i] = x[i] + dt * vx[i];
+            y[i] = y[i] + dt * vy[i];
+            z[i] = z[i] + dt * vz[i];
+        }
+    }
+
+    // Compute total energy as checksum
+    var energy: float = 0.0;
+    for (var i = 0; i < N; i++) {
+        energy = energy + 0.5 * mass[i] * (vx[i] * vx[i] + vy[i] * vy[i] + vz[i] * vz[i]);
+    }
+    println(energy);
+}
