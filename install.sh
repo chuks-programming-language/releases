@@ -3,6 +3,10 @@ set -e
 
 # Chuks Programming Language Installer
 # Usage: curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash
+#
+# Install a specific version / pre-release (GitHub hides pre-releases from
+# "latest", so a tag must be pinned):
+#   CHUKS_VERSION=v0.1.0 curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash
 
 REPO="chuks-programming-language/releases"
 INSTALL_DIR="$HOME/chuks/bin"
@@ -30,13 +34,27 @@ else
     ARCHIVE="chuks-${PLATFORM}-${GOARCH}.tar.gz"
 fi
 
-URL="https://github.com/${REPO}/releases/latest/download/${ARCHIVE}"
+# Pin a specific release via CHUKS_VERSION (e.g. CHUKS_VERSION=v0.1.0), useful
+# for installing pre-releases which GitHub excludes from /releases/latest/.
+# A bare version like "0.1.0" is accepted and normalized to "v0.1.0".
+if [ -n "${CHUKS_VERSION:-}" ]; then
+    case "$CHUKS_VERSION" in
+        v*) TAG="$CHUKS_VERSION" ;;
+        *)  TAG="v${CHUKS_VERSION}" ;;
+    esac
+    URL="https://github.com/${REPO}/releases/download/${TAG}/${ARCHIVE}"
+    RELEASE_LABEL="$TAG"
+else
+    URL="https://github.com/${REPO}/releases/latest/download/${ARCHIVE}"
+    RELEASE_LABEL="latest"
+fi
 EXTRACT_DIR="chuks-${PLATFORM}-${GOARCH}"
 
 echo ""
 echo "  Chuks Installer"
 echo "  ────────────────"
 echo "  Platform:     ${PLATFORM}/${GOARCH}"
+echo "  Release:      ${RELEASE_LABEL}"
 echo "  Archive:      ${ARCHIVE}"
 echo "  Install to:   ${INSTALL_DIR}"
 echo ""
