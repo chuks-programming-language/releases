@@ -5,8 +5,9 @@ set -e
 # Usage: curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash
 #
 # Install a specific version / pre-release (GitHub hides pre-releases from
-# "latest", so a tag must be pinned):
-#   CHUKS_VERSION=v0.1.0 curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash
+# "latest", so a tag must be pinned). Note: CHUKS_VERSION must be set on the
+# `bash` process, not on `curl`, so place it after the pipe:
+#   curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | CHUKS_VERSION=v0.1.0 bash
 
 REPO="chuks-programming-language/releases"
 INSTALL_DIR="$HOME/chuks/bin"
