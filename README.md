@@ -141,6 +141,13 @@ For the best development experience, install the official [Chuks VS Code extensi
 - [Standard Library](https://chuks.org/stdlib/overview/)
 - [Why Chuks?](https://chuks.org/getting-started/why-chuks/)
 
+## Contributing
+
+The compiler is private and invitation-only, but the ecosystem is open to everyone.
+The best ways to contribute are building and publishing packages, filing detailed bug
+reports, and engaging with the community. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+full guide and how invitations work.
+
 ## License
 
 See the [Chuks website](https://chuks.org) for license details.
