@@ -4,8 +4,11 @@ set -e
 # Chuks Programming Language Installer
 # Usage: curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | bash
 #
-# Install a specific version / pre-release (GitHub hides pre-releases from
-# "latest", so a tag must be pinned). Note: CHUKS_VERSION must be set on the
+# Install the latest PRERELEASE (preview) build:
+#   curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | CHUKS_PRERELEASE=1 bash
+#
+# Or pin a specific version / pre-release tag (GitHub hides pre-releases from
+# "latest", so a tag must be pinned). Note: the variable must be set on the
 # `bash` process, not on `curl`, so place it after the pipe:
 #   curl -fsSL https://raw.githubusercontent.com/chuks-programming-language/releases/main/install.sh | CHUKS_VERSION=v0.1.0 bash
 
@@ -35,9 +38,14 @@ else
     ARCHIVE="chuks-${PLATFORM}-${GOARCH}.tar.gz"
 fi
 
-# Pin a specific release via CHUKS_VERSION (e.g. CHUKS_VERSION=v0.1.0), useful
-# for installing pre-releases which GitHub excludes from /releases/latest/.
-# A bare version like "0.1.0" is accepted and normalized to "v0.1.0".
+# Channel selection:
+#   - CHUKS_VERSION=v0.1.0  pins a specific release (bare "0.1.0" is normalized).
+#   - CHUKS_PRERELEASE=1     installs the latest PRERELEASE (preview) build. The
+#       prerelease channel always tracks the newest published release, including
+#       prereleases, which GitHub's /releases/latest endpoint excludes.
+#   - default                installs the latest STABLE release.
+# CHUKS_VERSION must be set on the `bash` process (after the pipe), e.g.
+#   curl -fsSL .../install.sh | CHUKS_PRERELEASE=1 bash
 if [ -n "${CHUKS_VERSION:-}" ]; then
     case "$CHUKS_VERSION" in
         v*) TAG="$CHUKS_VERSION" ;;
@@ -45,6 +53,20 @@ if [ -n "${CHUKS_VERSION:-}" ]; then
     esac
     URL="https://github.com/${REPO}/releases/download/${TAG}/${ARCHIVE}"
     RELEASE_LABEL="$TAG"
+elif [ "${CHUKS_PRERELEASE:-}" = "1" ] || [ "${CHUKS_PRERELEASE:-}" = "true" ]; then
+    # Resolve the newest published release (including prereleases). Anonymous
+    # API requests never return drafts, so the first tag_name is the newest
+    # published release.
+    echo "→ Resolving the latest prerelease..."
+    TAG="$(curl -fsSL "https://api.github.com/repos/${REPO}/releases?per_page=10" \
+        | grep -m1 '"tag_name"' \
+        | sed -E 's/.*"tag_name"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/')"
+    if [ -z "$TAG" ]; then
+        echo "Error: could not resolve the latest prerelease from GitHub." >&2
+        exit 1
+    fi
+    URL="https://github.com/${REPO}/releases/download/${TAG}/${ARCHIVE}"
+    RELEASE_LABEL="${TAG} (prerelease)"
 else
     URL="https://github.com/${REPO}/releases/latest/download/${ARCHIVE}"
     RELEASE_LABEL="latest"
